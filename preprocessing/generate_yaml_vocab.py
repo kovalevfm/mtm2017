@@ -62,6 +62,7 @@ args = parser.parse_args()
 cnt = collections.Counter()
 
 for line in args.infile:
+  line = line.decode('utf-8')
   if args.downcase:
     line = line.lower()
   if args.delimiter == "":
@@ -91,14 +92,14 @@ word_with_counts = sorted(
 if args.max_vocab_size is not None:
   word_with_counts = word_with_counts[:args.max_vocab_size]
 
-for word, count in word_with_counts:
-  print("{}\t{}".format(word, count))
+#for word, count in word_with_counts:
+#  print("{}\t{}".format(word, count))
 
-vocab = [['</s>', '0'], ['<unk>', '0']] + word_with_counts
+vocab = [(u'</s>', '0'), (u'<unk>', '0')] + word_with_counts
 
 
 save_vocab = dict([s[0], i] for i, s in enumerate(vocab))
-output = yaml.dump(save_vocab, Dumper=yaml.CDumper, default_flow_style=False)
+output = yaml.safe_dump(save_vocab, default_flow_style=False, encoding='utf-8', allow_unicode=True)
 print output
 
 
